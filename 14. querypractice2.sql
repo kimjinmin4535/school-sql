@@ -1,0 +1,230 @@
+-- 사원 중 수원시에 사는 사람이고 디자인팀 또는 데이터팀이면서 
+-- 생년월일이 19900101에서 19991231 사이에 해당되는 사원을 검색하시오.
+
+SELECT A.EMP_NO 
+	, A.EMP_NAME 
+	, A.SEX_CD 
+	, A.BIRTH_DE 
+	, A.DEPT_CD 
+	, A.ADDR 
+FROM TB_EMP A
+WHERE A.BIRTH_DE BETWEEN '19900101' AND '19991231'	-- 1990년대 생
+	AND A.DEPT_CD IN ('100004','100006')	-- 특정팀들 (디자인팀, 데이터팀)
+	AND A.ADDR LIKE '%수원시%'				-- 특정 지역 (수원시에 사는 사람)
+;	
+
+-- 성이 "박"씨인 직원을 출력하시오.
+SELECT A.EMP_NO 
+	, A.EMP_NAME 
+	, A.SEX_CD 
+	, A.BIRTH_DE 
+	, A.DEPT_CD 
+	, A.ADDR 
+FROM TB_EMP A 
+WHERE A.EMP_NAME LIKE '박__'
+;
+
+-- 직속관리자사원번호가 NULL인 직원을 조회하시오.
+SELECT A.EMP_NO 
+	, A.EMP_NAME 
+	, A.SEX_CD 
+	, A.BIRTH_DE 
+	, A.DEPT_CD 
+	, A.ADDR
+	, NVL(A.DIRECT_MANAGER_EMP_NO, '상사없음') DIRECT_MANAGER_EMP_NO
+FROM TB_EMP A
+WHERE A.DIRECT_MANAGER_EMP_NO IS NULL 
+;
+
+-- 수원시 혹은 성남시에 사는 사람을 포함하여 검색하시오.
+SELECT A.EMP_NO 
+	, A.EMP_NAME 
+	, A.SEX_CD 
+	, A.BIRTH_DE 
+	, A.DEPT_CD 
+	, A.ADDR 
+FROM TB_EMP A
+WHERE A.BIRTH_DE BETWEEN '19900101' AND '19991231'	-- 1990년대 생
+	AND A.DEPT_CD IN ('100004','100006')	-- 특정팀들 (디자인팀, 데이터팀)
+	AND (A.ADDR LIKE '%수원시%'				-- 특정 지역 (수원시에 사는 사람)
+		OR A.ADDR LIKE '%성남시%')			-- 특정 지역 (성남시에 사는 사람)
+;	
+
+-- 수원시 혹은 성남시에 사는 사람을 제외하고 검색하시오.
+SELECT A.EMP_NO 
+	, A.EMP_NAME 
+	, A.SEX_CD 
+	, A.BIRTH_DE 
+	, A.DEPT_CD 
+	, A.ADDR 
+FROM TB_EMP A
+WHERE A.BIRTH_DE BETWEEN '19900101' AND '19991231'	-- 1990년대 생
+	AND A.DEPT_CD IN ('100004','100006')	-- 특정팀들 (디자인팀, 데이터팀)
+	AND NOT (A.ADDR LIKE '%수원시%'				-- 특정 지역 (수원시에 사는 사람)
+			OR A.ADDR LIKE '%성남시%')			-- 특정 지역 (성남시에 사는 사람)
+;	
+
+
+-- 급여지급일자가 2020년 5월인 지급 내역 중 지급 액수가 550만원 이상인 내역을 출력하시오.
+SELECT A.SAL_HIS_NO 
+		,A.PAY_DE 
+		,A.PAY_AMT 
+		,A.EMP_NO 
+FROM EZEN.TB_SAL_HIS A
+WHERE A.PAY_DE >= '20200501'
+	AND A.PAY_DE <= '20200531'
+	AND A.PAY_AMT >= 5500000
+;	
+
+-- 급여지급일자가 2020년 5월인 지급 내역 중 지급 액수가 550만원 이만인 내역을 출력하시오.
+SELECT A.SAL_HIS_NO 
+		,A.PAY_DE 
+		,A.PAY_AMT 
+		,A.EMP_NO 
+FROM EZEN.TB_SAL_HIS A
+WHERE A.PAY_DE >= '20200501'
+	AND A.PAY_DE <= '20200531'
+	AND NOT A.PAY_AMT >= 5500000
+;	
+
+
+-- 사원 중 부서가 디자인팀 또는 데이터팀이면서 
+-- 생년월일이 19900101에서 19991231 사이에 해당되는 사원 중 성별이 남자가 아닌 직원을 검색하시오.
+
+SELECT A.EMP_NO 
+	, A.EMP_NAME 
+	, A.SEX_CD 
+	, A.BIRTH_DE 
+	, A.DEPT_CD 
+	, A.ADDR 
+FROM TB_EMP A
+WHERE A.BIRTH_DE BETWEEN '19900101' AND '19991231'	-- 1990년대 생
+	AND A.DEPT_CD IN ('100004','100006')	-- 특정팀들 (디자인팀, 데이터팀)
+	AND A.SEX_CD <> 1
+;	
+
+
+
+SELECT A.EMP_NO 
+	, A.EMP_NAME 
+	, A.SEX_CD 
+	, A.BIRTH_DE 
+	, A.DEPT_CD 
+	, A.ADDR 
+FROM TB_EMP A
+WHERE A.BIRTH_DE NOT BETWEEN '19900101' AND '19991231'	-- 1990년대 생이 아니고
+	AND A.DEPT_CD NOT IN ('100004','100006')	-- 특정팀들(디자인팀, 데이터팀)이 아니고
+	AND A.SEX_CD <> 1							-- 성별이 남자가 아니고
+	AND A.DIRECT_MANAGER_EMP_NO IS NOT NULL		-- 직속관리자사원번호가 존재하는 직원 
+;	
+
+
+
+-----------------------------------------------------------------------
+DROP TABLE EZEN.CHAR_COMPARE;
+CREATE TABLE EZEN.CHAR_COMPARE
+(
+	SN 		CHAR(10)
+	,CHAR_COMPARE_4		CHAR(4)
+	,CHAR_COMPARE_6		CHAR(6)
+)
+;
+
+INSERT INTO EZEN.CHAR_COMPARE VALUES ('1000000001', 'SQLD', 'SQLD  ');
+INSERT INTO EZEN.CHAR_COMPARE VALUES ('1000000002', 'SQLD', 'SQLA  ');
+COMMIT;
+
+
+SELECT *
+FROM EZEN.CHAR_COMPARE cc ;
+
+-- 공백이 들어간 것을 알수 있음.
+SELECT 
+	REPLACE(CHAR_COMPARE_4, ' ', '_') AS CHAR_COMPARE_4 
+	,REPLACE(CHAR_COMPARE_6, ' ', '_') AS CHAR_COMPARE_6 
+FROM EZEN.CHAR_COMPARE cc 
+;
+
+-- 공백만 다르다면 같다고 판단함
+SELECT 
+	REPLACE(CHAR_COMPARE_4, ' ', '_') AS CHAR_COMPARE_4 
+	,REPLACE(CHAR_COMPARE_6, ' ', '_') AS CHAR_COMPARE_6 
+FROM EZEN.CHAR_COMPARE cc 
+WHERE SN = '1000000001'
+	AND CHAR_COMPARE_4 = CHAR_COMPARE_6 
+;
+
+
+SELECT 
+	REPLACE(CHAR_COMPARE_4, ' ', '_') AS CHAR_COMPARE_4 
+	,REPLACE(CHAR_COMPARE_6, ' ', '_') AS CHAR_COMPARE_6 
+FROM EZEN.CHAR_COMPARE cc 
+WHERE SN = '1000000001'
+	AND CHAR_COMPARE_4 <> CHAR_COMPARE_6 
+;
+
+-- SQLD가 더 큼. SQLA뒤에 있는 공백은 크기 비교에 영향을 주지 못함.
+SELECT 
+	REPLACE(CHAR_COMPARE_4, ' ', '_') AS CHAR_COMPARE_4 
+	,REPLACE(CHAR_COMPARE_6, ' ', '_') AS CHAR_COMPARE_6 
+FROM EZEN.CHAR_COMPARE cc 
+WHERE SN = '1000000002'
+	AND CHAR_COMPARE_4 > CHAR_COMPARE_6 	-- 알파벳 D가 더 큼 
+;
+
+
+----------------------------------------------------------------------
+DROP TABLE EZEN.VARCHAR_COMPARE;
+CREATE TABLE EZEN.VARCHAR_COMPARE
+(
+	SN 		CHAR(10)
+	,CHAR_COMPARE_4		CHAR(4)
+	,CHAR_COMPARE_6		VARCHAR2(6)
+)
+;
+INSERT INTO EZEN.VARCHAR_COMPARE VALUES ('1000000001', 'SQLD', 'SQLD  ');
+INSERT INTO EZEN.VARCHAR_COMPARE VALUES ('1000000002', 'SQLD', 'SQLA  ');
+COMMIT;
+
+
+-- VARCHAR2 컬럼의 값은 뒤에 공백이 있음
+SELECT 
+		REPLACE (CHAR_COMPARE_4, ' ', '_') AS CHAR_COMPARE_4 
+		,REPLACE (CHAR_COMPARE_6, ' ', '_') AS CHAR_COMPARE_6 
+FROM EZEN.VARCHAR_COMPARE vc 
+;
+
+
+-- 결과집합 없음. 길이가 달라서 같지 않다고 판단함.
+SELECT 
+		REPLACE (CHAR_COMPARE_4, ' ', '_') AS CHAR_COMPARE_4 
+		,REPLACE (CHAR_COMPARE_6, ' ', '_') AS CHAR_COMPARE_6 
+FROM EZEN.VARCHAR_COMPARE vc 
+WHERE SN = '1000000001'
+	AND CHAR_COMPARE_4 = CHAR_COMPARE_6 
+;	
+
+
+-- SQLD까지 문자는 동일하나 공백이 틀려서 같지 않다고 판단함.
+SELECT 
+		REPLACE (CHAR_COMPARE_4, ' ', '_') AS CHAR_COMPARE_4 
+		,REPLACE (CHAR_COMPARE_6, ' ', '_') AS CHAR_COMPARE_6 
+FROM EZEN.VARCHAR_COMPARE vc 
+WHERE SN = '1000000001'
+	AND CHAR_COMPARE_4 <> CHAR_COMPARE_6 
+;	
+
+-- 문자유형비교 방법
+-- 비교연산자중 한쪽이 VARCHAR인 경우 - TRIM함수 이용
+-- TRIM() : VARCHAR2 컬럼 뒤에 있는 공백을 제거
+
+SELECT 
+		REPLACE (CHAR_COMPARE_4, ' ', '_') AS CHAR_COMPARE_4 
+		,REPLACE (CHAR_COMPARE_6, ' ', '_') AS CHAR_COMPARE_6 
+FROM EZEN.VARCHAR_COMPARE vc 
+WHERE SN = '1000000001'
+	AND CHAR_COMPARE_4 = TRIM(CHAR_COMPARE_6)
+;	
+
+
+

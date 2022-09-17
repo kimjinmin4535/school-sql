@@ -1,0 +1,84 @@
+-- 고객 테이블에서 고객 아이디, 고객명, 신용카드한도액을 가져오시오.
+SELECT c.CUSTOMER_ID 
+		, c.NAME 
+		, c.CREDIT_LIMIT 
+FROM CUSTOMERS c 
+;
+
+-- 고객 테이블에서 고객아이디, 고객명, 주소, 웹사이트, 신용카드한도금액을 가져오시오.
+
+SELECT *
+FROM CUSTOMERS c 
+;
+
+-- 오라클에서 제공하는 dual 테이블을 조회하시오.
+-- dual 테이블을 이용하여 SELECT 절에서 다양한 연산처리를 할수 있음.
+SELECT *
+FROM DUAL
+;
+
+
+SELECT (10+5)/2 AS val
+FROM dual
+;
+
+SELECT 
+		c.NAME 
+		,c.ADDRESS 
+		,c.CREDIT_LIMIT 
+FROM CUSTOMERS c 
+ORDER BY c.NAME DESC  
+;
+
+SELECT 
+		c.FIRST_NAME 
+		,c.LAST_NAME 
+FROM CONTACTS c 
+ORDER BY c.FIRST_NAME , c.LAST_NAME DESC 
+;
+
+SELECT FIRST_NAME 
+FROM CONTACTS c 
+ORDER BY FIRST_NAME 
+;
+
+SELECT 
+		DISTINCT FIRST_NAME 
+FROM CONTACTS c 
+ORDER BY FIRST_NAME 
+;
+
+SELECT 
+		DISTINCT PRODUCT_ID ,
+		QUANTITY 
+FROM ORDER_ITEMS oi 
+ORDER BY PRODUCT_ID 
+;
+
+
+SELECT 
+	PRODUCT_NAME 
+	,DESCRIPTION 
+	,LIST_PRICE 
+	,CATEGORY_ID 
+FROM PRODUCTS p 
+WHERE PRODUCT_NAME = 'Kingston'
+;
+
+-- PRODUCT_NAME이 'Asus'로 시작하는 행(들)을 출력하시오. (PRODUCT_NAME, List_price)
+-- List_price 정렬하시오.
+
+SELECT 
+		PRODUCT_NAME 
+		,LIST_PRICE 
+FROM PRODUCTS p 
+WHERE PRODUCT_NAME LIKE 'Asus%'
+ORDER BY LIST_PRICE 
+;
+
+
+
+
+
+
+
